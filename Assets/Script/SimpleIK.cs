@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SimpleIK : MonoBehaviour
 {
@@ -21,35 +20,32 @@ public class SimpleIK : MonoBehaviour
 
     void SolveIK()
     {
-        // 1. KUNCI SUMBU Z DI SINI (tambahkan baris ini paling atas)
-        target.position = new Vector3(target.position.x, target.position.y, upperJoint.position.z);
-
         Vector3 rootPos = upperJoint.position;
         Vector3 targetPos = target.position;
 
+        // 1. Hitung jarak 3D penuh
         float dist = Vector3.Distance(rootPos, targetPos);
         dist = Mathf.Clamp(dist, 0.001f, bone1Length + bone2Length - 0.001f);
 
         // 2. Law of Cosines
-        float cosKnee = (bone1Length * bone1Length + bone2Length * bone2Length - dist * dist) / (2 * bone1Length * bone2Length);
-        float KneeAngle = Mathf.Acos(Mathf.Clamp(cosKnee, -1f, 1f)) * Mathf.Rad2Deg;
-
-        // 3. Arah target
-        Vector3 dirToTarget = (targetPos - rootPos).normalized;
-        float targetAngle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg;
-
-        // Sudut paha
         float cosUpper = (bone1Length * bone1Length + dist * dist - bone2Length * bone2Length) / (2 * bone1Length * dist);
-        float upperAngle = targetAngle - (Mathf.Acos(Mathf.Clamp(cosUpper, -1f, 1f)) * Mathf.Rad2Deg);
+        cosUpper = Mathf.Clamp(cosUpper, -1f, 1f);
 
-        // 4. Hitung posisi lutut (PERHATIKAN: dua-duanya harus Deg2Rad!)
-        Vector3 kneePos = rootPos + new Vector3(
-            Mathf.Cos(upperAngle * Mathf.Deg2Rad),
-            Mathf.Sin(upperAngle * Mathf.Deg2Rad),
-            0
-        ) * bone1Length;
-        
-        kneeJoint.position = kneePos;
+        // Cari tinggi segitiga menggunakan rumus Pythagoras: sin = sqrt(1 - cos^2)
+        float sinUpper = Mathf.Sqrt(1f - (cosUpper * cosUpper));
+
+        // 3. Arah garis lurus dari paha menuju telapak kaki
+        Vector3 dirToTarget = (targetPos - rootPos).normalized;
+
+        // 4. Arah tonjolan lutut: selalu menghadap ke arah depan paha (upperJoint.forward)
+        Vector3 kneeForward = Vector3.ProjectOnPlane(upperJoint.forward, dirToTarget).normalized;
+        if (kneeForward == Vector3.zero)
+            kneeForward = Vector3.forward;
+
+        // 5. Hitung posisi lutut di ruang 3D:
+        // Maju ke arah target sejauh (bone1 * cos), lalu dorong ke arah lutut sejauh (bone1 * sin)
+        Vector3 KneePos = rootPos + (dirToTarget * (bone1Length * cosUpper) + (kneeForward * (bone1Length * sinUpper)));
+        kneeJoint.position = KneePos;
     }
 
     void OnDrawGizmos()
