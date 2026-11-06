@@ -1,49 +1,55 @@
 using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class ProceduralLeg : MonoBehaviour
 {
     [Header("Referensi")]
-    public Transform footHome; // Posisi ideal kaki (anak dari Body)
-    
-    [Header("Pengaturan Langkah")]
-    public float stepDistance = 1.2f; // Jarak maksimal sebelum melangkah
-    public float stepHeight = 0.4f;   // Tinggi kaki terangkat saat melangkah
-    public float stepSpeed = 5f;      // Kecepatan ayunan kaki
+    public Transform footHome;
+    public ProceduralLeg otherLeg;
+    public LayerMask groundLayer;
 
-    private bool isStepping = false;
+    [Header("Pengaturan Langkah")]
+    public float stepDistance = 0.75f;
+    public float stepHeight = 0.35f;   
+    public float stepSpeed = 7f;  
+
+    public bool IsStepping { get; private set; } = false;
 
     void Update()
     {
         if (footHome == null) return;
-        if (isStepping) return;
+        if (IsStepping) return;
 
-        float dist = Vector3.Distance(transform.position, footHome.position);
+        // Jangan melangkah jika kaki sebelah belum selesai menapak
+        if (otherLeg != null && otherLeg.IsStepping) return;
 
-        if (dist > stepDistance)
+        // Hitung jarak horizontal murni (X & Z)
+        Vector3 toHome = footHome.position - transform.position;
+        toHome.y = 0f;
+        float horizontalDist = toHome.magnitude;
+
+        if (horizontalDist > stepDistance)
         {
-            Debug.Log("JARAK KEJAUHAN! KAKI MULAI MELANGKAH.");
             StartCoroutine(PerformStep());
         }
     }
 
     IEnumerator PerformStep()
     {
-        isStepping = true;
+        IsStepping = true;
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
 
         Vector3 targetPos = footHome.position;
-        Quaternion targetRot = transform.rotation;
+        // Target rotasi diselaraskan dengan rotasi footHome (mengikuti arah hadap tubuh)
+        Quaternion targetRot = footHome.rotation;
 
-        // Tembak Raycast ke bawah untuk mendeteksi tanah dan kemiringannya
-        if (Physics.Raycast(footHome.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 2f))
+        // Tembak laser dari ketinggian aman 1.0m di atas footHome
+        if (Physics.Raycast(footHome.position + Vector3.up * 1.0f, Vector3.down, out RaycastHit hit, 3f, groundLayer))
         {
             targetPos = hit.point;
-            // HITUNG KEMIRINGAN LANTAI:
-            // Putar telapak kaki agar menempel rata dengan sudut kemiringan lereng (hit.normal)
-            targetRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.parent.rotation;
+            // Selaraskan kemiringan telapak kaki dengan kontur permukaan lantai
+            targetRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * footHome.rotation;
         }
 
         float progress = 0f;
@@ -52,18 +58,28 @@ public class ProceduralLeg : MonoBehaviour
         {
             progress += Time.deltaTime * stepSpeed;
 
-            //gerak posisi lerp + sinus
-            Vector3 currentPos = Vector3.Lerp(startPos, targetPos, progress);// Gerakan horizontal: Lerp dari posisi lama ke posisi baru
-            currentPos.y += Mathf.Sin(progress * Mathf.PI) * stepHeight;// Gerakan vertikal: Kaki melengkung ke atas pakai Sinus
+            // Perpindahan posisi (Parabola Lerp + Sinus)
+            Vector3 currentPos = Vector3.Lerp(startPos, targetPos, progress);
+            currentPos.y += Mathf.Sin(progress * Mathf.PI) * stepHeight;
             transform.position = currentPos;
 
-            // Gerak rotasi (Slerp) agar telapak kaki ikut miring halus
+            // Perpindahan rotasi halus
             transform.rotation = Quaternion.Slerp(startRot, targetRot, progress);
+
             yield return null;
         }
 
         transform.position = targetPos;
         transform.rotation = targetRot;
-        isStepping = false;
+        IsStepping = false;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (footHome != null)
+        {
+            Gizmos.color = IsStepping ? Color.green : Color.red;
+            Gizmos.DrawLine(transform.position, footHome.position);
+        }
     }
 }

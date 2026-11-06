@@ -1,21 +1,36 @@
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 
 public class ProceduralBodyController : MonoBehaviour
 {
+    [Header ("Deteksi Lantai")]
+    public LayerMask GroundLayer;
+
+    [Header ("Referensi Kaki")]
+    public Transform leftFoot;
+    public Transform rightFoot;
+
     [Header("Kecepatan")]
-    public float moveSpeed = 3f;      // Kecepatan jalan
-    public float turnSpeed = 10f;     // Kecepatan putar badan
+    public float moveSpeed = 3f;     
+    public float turnSpeed = 10f;   
 
     [Header("Dinamika Tubuh (Bobbing)")]
-    public float bobFrequency = 10f;  // Kecepatan naik-turun tubuh
-    public float bobAmount = 0.08f;   // Seberapa dalam tubuh membal saat melangkah
+    public float bobFrequency = 10f;  
+    public float bobAmount = 0.08f;  
 
-    private float baseHeight;         // Menyimpan ketinggian normal tubuh
+    private float baseHeightOffset;      
     private float bobTimer = 0f;
+
+    private ProceduralLeg leftLegScript;
+    private ProceduralLeg rightLegScript;
 
     void Start()
     {
-        baseHeight = transform.position.y;
+        if (leftFoot != null) leftLegScript = leftFoot.GetComponent<ProceduralLeg>();
+        if (rightFoot != null) rightLegScript = rightFoot.GetComponent<ProceduralLeg>();
+
+        float InitialFootY = (leftFoot.position.y + rightFoot.position.y) / 2f; 
+        baseHeightOffset = transform.position.y - InitialFootY;
     }
 
     void Update()
@@ -27,10 +42,8 @@ public class ProceduralBodyController : MonoBehaviour
 
         if (moveInput.magnitude > 0.1f)
         {
-            //Pindah Posisi Tubuh
+            
             transform.position += moveInput * moveSpeed * Time.deltaTime;
-
-            // Putar badan menghadap ke arah jalan secara halus
             Quaternion targetRotation = Quaternion.LookRotation(moveInput);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
 
@@ -42,19 +55,33 @@ public class ProceduralBodyController : MonoBehaviour
             bobTimer = 0f;
         }
 
-        //Deteksi Ketinggian lantai di bawah tubuh
-        // Tembak laser dari atas tubuh ke lantai
-        float currentGroundY = 0f;
-        if (Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 10f))
-            if (hit.transform != transform)
-                currentGroundY = hit.point.y;// Ketinggian lantai tanjakan
-            
+        float groundedFootY = GetGroundedFootY();
 
         // Ketinggian Tubuh = Ketinggian Lantai + Jarak 1.3m + Efek Bobbing
         float bobOffset = (moveInput.magnitude > 0.1f) ? Mathf.Sin(bobTimer) * bobAmount : 0f;
-        float targetBodyY = currentGroundY + baseHeight + bobOffset;
+        float targetBodyY = groundedFootY + baseHeightOffset + bobOffset;
 
-        float SmoothY = Mathf.Lerp(transform.position.y, targetBodyY, 10f * Time.deltaTime);
+        float SmoothY = Mathf.Lerp(transform.position.y, targetBodyY, 8f * Time.deltaTime);
         transform.position = new Vector3(transform.position.x, SmoothY, transform.position.z);
+    }
+
+     float GetGroundedFootY()
+    {
+        bool leftStepping = leftLegScript != null && leftLegScript.IsStepping;
+        bool rightStepping = rightLegScript != null && rightLegScript.IsStepping;
+
+        // Jika kaki kiri melayang, tumpuan murni pada kaki kanan
+        if (leftStepping && !rightStepping)
+        {
+            return rightFoot.position.y;
+        }
+        // Jika kaki kanan melayang, tumpuan murni pada kaki kiri
+        if (rightStepping && !leftStepping)
+        {
+            return leftFoot.position.y;
+        }
+
+        // Jika kedua kaki menapak (idle / double stance), gunakan rata-rata keduanya
+        return (leftFoot.position.y + rightFoot.position.y) / 2f;
     }
 }

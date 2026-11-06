@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 221173969}
   - component: {fileID: 221173968}
   - component: {fileID: 221173967}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -424,7 +424,7 @@ GameObject:
   - component: {fileID: 270395691}
   - component: {fileID: 270395690}
   - component: {fileID: 270395689}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ramp (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -890,7 +890,7 @@ GameObject:
   - component: {fileID: 451489972}
   - component: {fileID: 451489971}
   - component: {fileID: 451489970}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ramp (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1188,9 +1188,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProceduralLeg
   footHome: {fileID: 1311933497}
-  stepDistance: 0.8
-  stepHeight: 0.4
-  stepSpeed: 5
+  otherLeg: {fileID: 1419967632}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  stepDistance: 0.75
+  stepHeight: 0.35
+  stepSpeed: 7
 --- !u!23 &914119004
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1350,7 +1354,7 @@ GameObject:
   - component: {fileID: 1292551835}
   - component: {fileID: 1292551834}
   - component: {fileID: 1292551833}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ramp (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1493,7 +1497,7 @@ GameObject:
   - component: {fileID: 1316065639}
   - component: {fileID: 1316065638}
   - component: {fileID: 1316065637}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ramp (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1640,9 +1644,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProceduralLeg
   footHome: {fileID: 1842634683}
-  stepDistance: 1.2
-  stepHeight: 0.4
-  stepSpeed: 5
+  otherLeg: {fileID: 914119003}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  stepDistance: 0.75
+  stepHeight: 0.35
+  stepSpeed: 7
 --- !u!23 &1419967634
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1712,6 +1720,7 @@ GameObject:
   - component: {fileID: 1466402146}
   - component: {fileID: 1466402145}
   - component: {fileID: 1466402147}
+  - component: {fileID: 1466402148}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -1807,10 +1816,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1966349c816a02645b8cc3bf21092115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProceduralBodyController
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  leftFoot: {fileID: 1419967631}
+  rightFoot: {fileID: 914119002}
   moveSpeed: 3
   turnSpeed: 10
   bobFrequency: 10
   bobAmount: 0.08
+--- !u!135 &1466402148
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466402142}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1765208199
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,7 +1858,7 @@ GameObject:
   - component: {fileID: 1765208202}
   - component: {fileID: 1765208201}
   - component: {fileID: 1765208200}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ramp (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1966,7 +2001,7 @@ GameObject:
   - component: {fileID: 1934165498}
   - component: {fileID: 1934165497}
   - component: {fileID: 1934165496}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ramp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
