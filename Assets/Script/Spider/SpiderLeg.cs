@@ -8,8 +8,10 @@ public class SpiderLeg : MonoBehaviour
     public LayerMask groundLayer;
 
     [Header("Pengaturan Langkah")]
+    public float stepDistance = 0.8f; 
     public float stepHeight = 0.35f;
-    public float stepSpeed = 8f;
+    public float stepSpeed = 9f;
+    public float stepOvershoot = 0.4f;
 
     public bool IsStepping { get; private set; } = false;
 
@@ -22,23 +24,27 @@ public class SpiderLeg : MonoBehaviour
         return toHome.magnitude;
     }
 
-    public void ExecuteStep()
+    // Dipanggil serentak oleh SpiderGaitManager8
+    public void ExecuteStep(Vector3 moveDirection)
     {
         if (!IsStepping)
-            StartCoroutine(PerformStep());
+        {
+            StartCoroutine(PerformStep(moveDirection));
+        }
     }
 
-    IEnumerator PerformStep()
+    IEnumerator PerformStep(Vector3 moveDirection)
     {
         IsStepping = true;
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
 
-        Vector3 targetPos = footHome.position;
+        Vector3 predictedHome = footHome.position + (moveDirection * stepOvershoot);
+        Vector3 targetPos = predictedHome;
         Quaternion targetRot = footHome.rotation;
 
-        Vector3 rayOrigin = footHome.position + Vector3.up * 1.5f;
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit , 4f, groundLayer))
+        Vector3 rayOrigin = predictedHome + Vector3.up * 1.5f;
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 4f, groundLayer))
         {
             targetPos = hit.point;
             targetRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * footHome.rotation;
@@ -63,7 +69,7 @@ public class SpiderLeg : MonoBehaviour
         IsStepping = false;
     }
 
-     void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         if (footHome != null)
         {
@@ -71,5 +77,4 @@ public class SpiderLeg : MonoBehaviour
             Gizmos.DrawLine(transform.position, footHome.position);
         }
     }
-
 }
