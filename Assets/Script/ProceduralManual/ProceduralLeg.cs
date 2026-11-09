@@ -5,13 +5,16 @@ public class ProceduralLeg : MonoBehaviour
 {
     [Header("Referensi")]
     public Transform footHome;
-    public ProceduralLeg otherLeg;
     public LayerMask groundLayer;
+
+    [Header("Leg Coordination")]
+    public ProceduralLeg pairLeg;       // <--- 1. TEMAN GANDENGAN (Melangkah barengan)
+    public ProceduralLeg[] legsWaitFor; // <--- Grup lawan yang harus ditunggu
 
     [Header("Pengaturan Langkah")]
     public float stepDistance = 0.75f;
     public float stepHeight = 0.35f;
-    public float stepSpeed = 7f;
+    public float stepSpeed = 8f;
 
     public bool IsStepping { get; private set; } = false;
 
@@ -19,6 +22,7 @@ public class ProceduralLeg : MonoBehaviour
     {
         if (footHome == null) return;
 
+        
         Vector3 rayOrigin = footHome.position + Vector3.up * 1.5f;
         bool hasGround = Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit groundCheck, 4f, groundLayer);
 
@@ -30,13 +34,23 @@ public class ProceduralLeg : MonoBehaviour
         }
 
         if (IsStepping) return;
-        if (otherLeg != null && otherLeg.IsStepping) return;
+
+        if (legsWaitFor != null)
+        {
+            for (int i = 0; i < legsWaitFor.Length; i++)
+            {
+                if (legsWaitFor[i] != null && legsWaitFor[i].IsStepping)
+                    return;
+            }
+        }
 
         Vector3 toHome = footHome.position - transform.position;
         toHome.y = 0f;
         float horizontalDist = toHome.magnitude;
 
-        if (horizontalDist > stepDistance)
+        bool pairIsStepping = (pairLeg != null && pairLeg.IsStepping);
+
+        if (horizontalDist > stepDistance || pairIsStepping)
         {
             StartCoroutine(PerformStep());
         }
@@ -52,7 +66,7 @@ public class ProceduralLeg : MonoBehaviour
         Quaternion targetRot = footHome.rotation;
 
         Vector3 rayOrigin = footHome.position + Vector3.up * 1.5f;
-        if (Physics.Raycast(rayOrigin , Vector3.down, out RaycastHit hit, 2.5f, groundLayer))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 4f, groundLayer))
         {
             targetPos = hit.point;
             targetRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * footHome.rotation;
