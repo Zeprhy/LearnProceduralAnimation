@@ -19,10 +19,9 @@ public class ProceduralLeg : MonoBehaviour
     {
         if (footHome == null) return;
 
-        // 1. Cek apakah ada lantai di bawah jangkauan kaki
-        bool hasGround = Physics.Raycast(footHome.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit groundCheck, 2.5f, groundLayer);
+        Vector3 rayOrigin = footHome.position + Vector3.up * 1.5f;
+        bool hasGround = Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit groundCheck, 4f, groundLayer);
 
-        // 2. KUNCI ANTI-MELAR: Jika sedang melayang jatuh dari tebing, kunci kaki melipat di footHome!
         if (!hasGround)
         {
             transform.position = Vector3.Lerp(transform.position, footHome.position, 12f * Time.deltaTime);
@@ -33,7 +32,6 @@ public class ProceduralLeg : MonoBehaviour
         if (IsStepping) return;
         if (otherLeg != null && otherLeg.IsStepping) return;
 
-        // 3. Hitung jarak langkah horizontal (X & Z)
         Vector3 toHome = footHome.position - transform.position;
         toHome.y = 0f;
         float horizontalDist = toHome.magnitude;
@@ -53,7 +51,8 @@ public class ProceduralLeg : MonoBehaviour
         Vector3 targetPos = footHome.position;
         Quaternion targetRot = footHome.rotation;
 
-        if (Physics.Raycast(footHome.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 2.5f, groundLayer))
+        Vector3 rayOrigin = footHome.position + Vector3.up * 1.5f;
+        if (Physics.Raycast(rayOrigin , Vector3.down, out RaycastHit hit, 2.5f, groundLayer))
         {
             targetPos = hit.point;
             targetRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * footHome.rotation;

@@ -85,7 +85,7 @@ public class ProceduralBodyController : MonoBehaviour
         motion.y = verticalVelocity;
         if (controller.isGrounded && moveDir.magnitude > 0.1f)
         {
-            motion.y += Mathf.Sin(bobTimer) * bobAmount * 5f;
+            motion.y += Mathf.Sin(bobTimer) * bobAmount * 2f;
         }
         controller.Move(motion * Time.deltaTime);
     }
