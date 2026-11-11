@@ -332,9 +332,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 1172351210}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
   stepHeight: 0.35
   stepSpeed: 8
@@ -890,9 +890,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 647393108}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
   stepHeight: 0.35
   stepSpeed: 8
@@ -1327,8 +1327,8 @@ GameObject:
   - component: {fileID: 926753683}
   - component: {fileID: 926753682}
   - component: {fileID: 926753681}
-  m_Layer: 10
-  m_Name: Cube
+  m_Layer: 11
+  m_Name: WallCrawlTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1420,13 +1420,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926753680}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.012, y: 2.2104, z: -11.2431}
-  m_LocalScale: {x: 0.3180821, y: 4.5980463, z: 14.655887}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 12.56, y: 7.7, z: -4.31}
+  m_LocalScale: {x: 0.2, y: 21, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &993653469
 GameObject:
   m_ObjectHideFlags: 0
@@ -1615,9 +1615,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 1257476642}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
   stepHeight: 0.35
   stepSpeed: 8
@@ -1698,9 +1698,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 614976228}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
   stepHeight: 0.35
   stepSpeed: 8
@@ -1932,13 +1932,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 1027343627}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
-  stepHeight: 0.35
+  stepHeight: 0.15
   stepSpeed: 8
-  stepOvershoot: 0.4
+  stepOvershoot: 0.1
 --- !u!1 &1541460222
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,9 +2182,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 1594524261}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
   stepHeight: 0.35
   stepSpeed: 8
@@ -2234,9 +2234,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 575323732}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
   stepHeight: 0.35
   stepSpeed: 8
@@ -2341,13 +2341,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderLeg
   footHome: {fileID: 2111522213}
-  groundLayer:
+  WalkableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   stepDistance: 0.8
-  stepHeight: 0.35
+  stepHeight: 0.15
   stepSpeed: 8
-  stepOvershoot: 0.4
+  stepOvershoot: 0.1
 --- !u!1 &2109629457
 GameObject:
   m_ObjectHideFlags: 0
@@ -4204,9 +4204,9 @@ GameObject:
   - component: {fileID: 2340350056986343730}
   - component: {fileID: 6806615658490562614}
   - component: {fileID: 6806615658490562613}
-  - component: {fileID: 6806615658490562612}
   - component: {fileID: 6806615658490562611}
   - component: {fileID: 6806615658490562610}
+  - component: {fileID: 6806615658490562615}
   m_Layer: 0
   m_Name: spider
   m_TagString: Untagged
@@ -4252,28 +4252,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6806615658490562612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6806615658490562609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1966349c816a02645b8cc3bf21092115, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProceduralBodyController
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  cameraTransform: {fileID: 330585546}
-  moveSpeed: 4
-  turnSpeed: 10
-  gravity: -20
-  bobFrequency: 10
-  bobAmount: 0.05
-  tiltSmoothSpeed: 5
 --- !u!143 &6806615658490562613
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4292,7 +4270,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 0.01
+  m_Height: 0.02
   m_Radius: 0.012
   m_SlopeLimit: 60
   m_StepOffset: 0.5
@@ -4322,6 +4300,33 @@ MonoBehaviour:
   - {fileID: 290973023}
   - {fileID: 1182255483}
   stepDistance: 0.75
+--- !u!114 &6806615658490562615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6806615658490562609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfb9dc69876f60488d38e7e1d37eba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiderHybridController
+  cameraTransform: {fileID: 330585546}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  moveSpeed: 4
+  turnSpeed: 10
+  wallTurnSpeed: 120
+  tiltSmoothSpeed: 8
+  jumpForce: 8
+  gravity: -20
+  hoverHeight: 0.28
+  currentState: 0
 --- !u!4 &7025153313534910007
 Transform:
   m_ObjectHideFlags: 0

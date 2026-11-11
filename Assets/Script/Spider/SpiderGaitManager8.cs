@@ -11,6 +11,7 @@ public class SpiderGaitManager8 : MonoBehaviour
     [Header("Sensitivitas Langkah")]
     public float stepDistance = 0.75f;
 
+    private SpiderHybridController hybirdController;
     private int activeGroup = 0;
     private Vector3 lastBodyPos;
     private Vector3 currentVelocity;
@@ -18,13 +19,18 @@ public class SpiderGaitManager8 : MonoBehaviour
     void Start()
     {
         lastBodyPos = transform.position;
+        hybirdController =  GetComponent<SpiderHybridController>();
     }
 
     void Update()
     {
+
+        if (hybirdController != null && hybirdController.currentState == SpiderHybridController.MovementState.Airborne)
+            return;
+
         // Hitung arah gerak badan nyata per frame
         Vector3 frameMove = transform.position - lastBodyPos;
-        frameMove.y = 0f;
+        // frameMove.y = 0f;
         if (Time.deltaTime > 0f)
             currentVelocity = frameMove / Time.deltaTime;
         lastBodyPos = transform.position;

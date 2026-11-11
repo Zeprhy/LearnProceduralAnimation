@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class SpiderLeg : MonoBehaviour
 {
     [Header("Referensi")]
     public Transform footHome;
-    public LayerMask groundLayer;
+    public LayerMask WalkableLayer;
 
     [Header("Pengaturan Langkah")]
     public float stepDistance = 0.8f; 
@@ -20,8 +21,8 @@ public class SpiderLeg : MonoBehaviour
         if (footHome == null) return 0f;
 
         Vector3 toHome = footHome.position - transform.position;
-        toHome.y = 0f;
-        return toHome.magnitude;
+        Vector3 surfaceDist = Vector3.ProjectOnPlane(toHome, transform.up);
+        return surfaceDist.magnitude;
     }
 
     // Dipanggil serentak oleh SpiderGaitManager8
@@ -39,15 +40,16 @@ public class SpiderLeg : MonoBehaviour
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
 
-        Vector3 predictedHome = footHome.position + (moveDirection * stepOvershoot);
+        Vector3 projectedMove = Vector3.ProjectOnPlane(moveDirection, transform.up).normalized;
+        Vector3 predictedHome = footHome.position + (projectedMove * stepOvershoot);
         Vector3 targetPos = predictedHome;
         Quaternion targetRot = footHome.rotation;
 
-        Vector3 rayOrigin = predictedHome + Vector3.up * 1.5f;
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 4f, groundLayer))
+        Vector3 rayOrigin = predictedHome + footHome.up * 1f;
+        if (Physics.Raycast(rayOrigin, -footHome.up, out RaycastHit hit, 3f, WalkableLayer))
         {
             targetPos = hit.point;
-            targetRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * footHome.rotation;
+            targetRot = Quaternion.FromToRotation(footHome.up, hit.normal) * footHome.rotation;
         }
 
         float progress = 0f;
@@ -57,7 +59,7 @@ public class SpiderLeg : MonoBehaviour
             progress += Time.deltaTime * stepSpeed;
 
             Vector3 currentPos = Vector3.Lerp(startPos, targetPos, progress);
-            currentPos.y += Mathf.Sin(progress * Mathf.PI) * stepHeight;
+            currentPos += footHome.up * (Mathf.Sin(progress * Mathf.PI) * stepHeight);
             transform.position = currentPos;
 
             transform.rotation = Quaternion.Slerp(startRot, targetRot, progress);
