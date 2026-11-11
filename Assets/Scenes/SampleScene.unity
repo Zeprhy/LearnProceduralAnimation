@@ -749,10 +749,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa9ec94cd3b3e944bf7480503440bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdCameraMotion
-  Target: {fileID: 2340350056986343730}
-  distance: 5
+  target: {fileID: 2340350056986343730}
+  defaultDistance: 5
+  minDistance: 1
   height: 2
   smoothSpeed: 10
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   mouseSensitivity: 3
   minPitch: -10
   maxPitch: 60
@@ -1134,8 +1138,8 @@ Transform:
   m_GameObject: {fileID: 476968366}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.47, y: 0.49, z: -14.94}
-  m_LocalScale: {x: 7.977194, y: 0.6408, z: 3.8028543}
+  m_LocalPosition: {x: 7.47, y: 0.49, z: -9.289}
+  m_LocalScale: {x: 7.977194, y: 0.6408, z: 5.465462}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 317250877}
@@ -1610,8 +1614,8 @@ Transform:
   m_GameObject: {fileID: 676037942}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.4700003, y: 0.18, z: -18.5421}
-  m_LocalScale: {x: 7.977194, y: 0.6408, z: 3.8028543}
+  m_LocalPosition: {x: 7.4700003, y: 0.18, z: -14.466}
+  m_LocalScale: {x: 7.977194, y: 0.6408, z: 5.465462}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 317250877}
@@ -1938,8 +1942,8 @@ Transform:
   m_GameObject: {fileID: 993653469}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.47, y: -0.1796, z: -25.9633}
-  m_LocalScale: {x: 7.977194, y: 0.6408, z: 3.8028543}
+  m_LocalPosition: {x: 7.47, y: -0.1796, z: -25.132}
+  m_LocalScale: {x: 7.977194, y: 0.6408, z: 5.465462}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 317250877}
@@ -2055,8 +2059,8 @@ Transform:
   m_GameObject: {fileID: 1077750760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.26794145, z: -0, w: 0.96343523}
-  m_LocalPosition: {x: 21.0947, y: 5.33, z: -5.0988}
-  m_LocalScale: {x: 8.55712, y: 10.294606, z: 0.22259216}
+  m_LocalPosition: {x: 21.62, y: 9.7246, z: -5.97}
+  m_LocalScale: {x: 8.55712, y: 20.032415, z: 0.22259216}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 333115959}
@@ -2118,8 +2122,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077750760}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &1077750765
-MeshCollider:
+--- !u!65 &1077750765
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2136,10 +2140,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.0000001, y: 0.99999994, z: 1}
+  m_Center: {x: 0, y: 0.000000029802322, z: 0}
 --- !u!1 &1172351209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2360,8 +2363,8 @@ Transform:
   m_GameObject: {fileID: 1393212337}
   serializedVersion: 2
   m_LocalRotation: {x: -0.16382247, y: -0.23798095, z: 0.047755476, w: 0.9561625}
-  m_LocalPosition: {x: -6, y: -3.96, z: -26.91}
-  m_LocalScale: {x: 7.977194, y: 7.2, z: 18.82255}
+  m_LocalPosition: {x: -5.7149, y: -0.8124, z: -28.6921}
+  m_LocalScale: {x: 7.977194, y: 0.090504855, z: 19.235075}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 317250877}
@@ -3118,8 +3121,8 @@ Transform:
   m_GameObject: {fileID: 2109629457}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.4700003, y: 0.01, z: -22.2104}
-  m_LocalScale: {x: 7.977194, y: 0.6408, z: 3.8028543}
+  m_LocalPosition: {x: 7.4700003, y: 0.01, z: -19.7382}
+  m_LocalScale: {x: 7.977194, y: 0.6408, z: 5.465462}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 317250877}
@@ -4984,13 +4987,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   moveSpeed: 4
-  turnSpeed: 10
+  groundTurnSpeed: 10
   wallTurnSpeed: 120
   tiltSmoothSpeed: 8
   jumpForce: 8
   gravity: -20
   hoverHeight: 0.28
-  currentState: 0
 --- !u!4 &7025153313534910007
 Transform:
   m_ObjectHideFlags: 0

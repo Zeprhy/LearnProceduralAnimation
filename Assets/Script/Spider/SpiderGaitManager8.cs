@@ -25,7 +25,7 @@ public class SpiderGaitManager8 : MonoBehaviour
     void Update()
     {
 
-        if (hybirdController != null && hybirdController.currentState == SpiderHybridController.MovementState.Airborne)
+        if (hybirdController != null && hybirdController.CurrentState == SpiderHybridController.MovementState.Airborne)
             return;
 
         // Hitung arah gerak badan nyata per frame
